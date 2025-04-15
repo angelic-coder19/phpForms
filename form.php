@@ -26,9 +26,11 @@
             }
             $comment = clean_input($_POST['comment']);            
         }
+        // Make a variabe that stores the date to be displyed later
+        $timeStamp = date("h:i:sa, d-m-Y");
 
         // Display the users input
-        echo "$name <br> $email <br> $comment <br>"; 
+        echo "$name <br> $email <br> $comment <br> $timeStamp"; 
 
         // Create a function that validates the user's input
         function clean_input($data){
