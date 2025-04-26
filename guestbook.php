@@ -21,12 +21,20 @@
             $name_error = "Name field is empty";
         } else {
             $name = clean_input($_POST['name']);
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$name))
+            {
+                $name_error = "Only letters and white space allowed";
+            }
         }
         if (empty($_POST['email']))
         {
-            $name_error = "Email is empty";
+            $email_error = "Email is empty";
         } else {
             $email = clean_input($_POST['email']);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            {
+                $email_error = "Invaid email format";
+            }
         } 
         if (empty($_POST['comment']))
         {
@@ -41,9 +49,9 @@
 
     // create a function that will validate the input from the user
     function clean_input($input){
-        $input = htmlspecialchars($input);
         $input = stripslashes($input);
         $input = trim($input);
+        $input = htmlspecialchars($input);        
         return $input;
     }
     ?>
@@ -61,10 +69,10 @@
             <div id="form">
                 <form method ="POST" action ="<?php echo $_SERVER['PHP_SELF'] ?>"> 
                     <label for="Name" name= "name">Name:</label><br>
-                    <input type = "text" name = "name" id = "name">
+                    <input type = "text" name = "name" id = "name" value = "<?php echo $name ?>">
                     <span class = "error" ><?php echo $name_error ?></span> <br>
                     <label for="email">Email:</label><br>
-                    <input type="text" name= "email" placeholder="example@gmail.com" id="email">
+                    <input type="text" name= "email" placeholder="example@gmail.com" id="email" value = "<?php echo $email ?>">
                     <span class = "error"><?php echo $email_error ?> </span><br>
                     <label for="comment">Comment:</label> 
                     <span class = "error" ><?php echo $comment_error ?></span><br>
@@ -78,7 +86,7 @@
                 <h3>What Others have to say</h3> 
                 <p><?php 
                     // Displays the input of the user with the timestamp
-                    echo "$comment <br><br> $name <br> $email <br> $time" 
+                    echo "$comment <br><br> $name <br> $email <br> $time <br>";
                 ?></p>
             </div>
         </div>
