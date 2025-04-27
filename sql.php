@@ -14,18 +14,16 @@
     }
     echo "Connected successfully <br>";
 
-    /* Create database commented out because the database is a
-       already created 
-
+    
     $sql = "CREATE DATABASE myDB";
     if (mysqli_query($conn, $sql)) 
     {
         echo "Database created successfully";
     } else {
         echo "Error creating database: " . mysqli_error($conn);
-    } */ 
+    }  
 
-    /* Commented out because table can only be created once
+  
     // sql to create table 
     $sql = "CREATE TABLE MyGuests 
     ( 
@@ -75,7 +73,7 @@
         echo "<br>New records created successfully";
     } else{
         echo "Error preparing statement: " . mysqli_error($conn);
-    } */
+    } 
 
     // To retreive data, first make a variable to hold the query
     $sql = "SELECT id, firstname, lastname, email, reg_date FROM MyGuests";
