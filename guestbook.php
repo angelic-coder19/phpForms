@@ -9,6 +9,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale = 1.0">
     <?php 
+    // Connect with the database file
+    include "db_queries.php";
+
     // Create variables that will contain the contents of the form
     $name = $email = $comment = $time = "";
 
@@ -87,7 +90,7 @@
                     <textarea id="comment" name = "comment" placeholder="Tell us about your experience!" rows="4"></textarea><br>
                     <div id="button">
                         <input type="submit">
-                    </div>
+                    </div> 
                 </form>
             </div>
             <div id="viewComment">
@@ -97,6 +100,41 @@
                     if (!$error)
                     {
                         echo "$comment <br><br> $name <br> $email <br> $time <br>";
+
+                        // Send data to the data base using prepared statement for entry queries
+                        $sql = "INSERT INTO Guestbook (full_name, email, comment) 
+                                VALUES (?, ?, ?)";
+                        $stmt = mysqli_prepare($conn, $sql);
+
+                        if ($stmt)
+                        {       
+                            mysqli_stmt_bind_param($stmt, "sss", $first_name, $db_email, $db_comment);
+
+                            // Store form input from the user into the above variables 
+                            $first_name = $name;
+                            $db_email = $email;
+                            $db_comment = $comment;
+
+                            mysqli_stmt_execute($stmt); 
+
+                            $success_message = "<br> Your comment has been successfully sent!";
+                            echo $success_message;
+                        } else {
+                            $success_message = "Couldn't save your comment";
+                        }  
+                    }
+
+                    // Dynamically display the contents of the database table for users to see previous comments 
+                    $sql = "SELECT full_name, email, comment, reg_date
+                            FROM Guestbook";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0)
+                    {
+                        while ($row = mysqli_fetch_assoc($result)) // This places the content in each column into an associative array
+                        {
+                            echo $row["comment"] . "<br><br>" . $row["full_name"] . "<br>" . $row["email"] . "<br>" . $row["reg_date"] . "<br><br>_________________________<br><br>";
+                        }
                     }
                 ?></p>
             </div>
