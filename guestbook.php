@@ -75,30 +75,29 @@
         </div>
         <div id="main-paragraph"> 
             <P>
-                <b>Welcome to the Ndola Guestbook - your space to share memories, moments and stories about our beautiful city!</b>
-                Whether you are a local, visitor, or someone passing through, 
-                we would love to hear about your experiences in Ndola. From the lively streets of Masala 
-                to the calm evenings of Itawa, every story adds a little more heart to our city story.
+                <b>Welcome to the Guestbook of Ndola, the beating heart of Zambia's Copperbelt!<span class = "emoji">&#128151;&#127961;</span>
+                - your space to share memories, moments and stories about our beautiful city!</b>
+                Whether you are a proud resident (a <b><i>Zimandola</i></b>), a nostalgic visitor, or someone passing through, 
+                we would love to hear about your experiences in the friendly city of Ndola.
             </p>
-            <p>Leaving the friendly city already<span class="emoji">&#128532</span>? We are glad you visited<span class="emoji">&#128515</span>. share your <strong><i>Zimandola</i></strong> experience 
-                with us by leaving a comment below!<span class="emoji">&#128071</span>
+                Share your favorite spots, unforgattable moments<span class = "emoji">&#10024;</span>, or simply say hello. From the lively streets of Masala<span class = "emoji">&#127750;</span>
+                to the calm evenings of Itawa<span class = "emoji">&#127769;</span>, every story adds a little more heart to our city story.
+            <p>
             </p>  
         </div>
         <div class="row">
             <div id="form">
                 <form method ="POST" action ="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"> 
                     <label for="Name" name= "name">Name:</label><br>
-                    <input type = "text" name = "name" id = "name" value = "<?php echo $name ?>">
+                    <input class = "input" type = "text" name = "name" id = "name" value = "<?php echo $name ?>">
                     <span class = "error" ><?php echo $name_error ?></span> <br>
                     <label for="email">Email:</label><br>
-                    <input type="text" name= "email" placeholder="example@gmail.com" id="email" value = "<?php echo $email ?>">
+                    <input class = "input" type="text" name= "email" placeholder="example@gmail.com" id="email" value = "<?php echo $email ?>">
                     <span class = "error"><?php echo $email_error ?> </span><br>
                     <label for="comment">Comment:</label> 
                     <span class = "error" ><?php echo $comment_error ?></span><br>
-                    <textarea id="comment" name = "comment" placeholder="Tell us about your experience!" rows="4"></textarea><br>
-                    <div id="button">
-                        <input type="submit">
-                    </div> 
+                    <textarea class = "input" id="comment" name = "comment" placeholder="Tell us about your experience!" rows="4"></textarea><br>
+                    <input id = "button" type="submit"><span><?php $success_message = ""; echo $success_message; ?></span>
                 </form>
             </div>
             <div id="viewComment">
@@ -116,17 +115,31 @@
 
                         if ($stmt && !empty($name) && !empty($email) && !empty($comment))
                         {       
-                            mysqli_stmt_bind_param($stmt, "sss", $first_name, $db_email, $db_comment);
 
-                            // Store form input from the user into the above variables 
-                            $first_name = $name;
-                            $db_email = $email;
-                            $db_comment = $comment;
+                                mysqli_stmt_bind_param($stmt, "sss", $first_name, $db_email, $db_comment);
 
-                            mysqli_stmt_execute($stmt); 
+                                // Store form input from the user into the above variables 
+                                $first_name = $name;
+                                $db_email = $email;
+                                $db_comment = $comment;
 
-                            $success_message = "<br> Your comment has been successfully sent!";
-                            echo $success_message;
+                                // This query checks whether a comment already exits in the database to prevent duplicate entries 
+                                $query = "SELECT * FROM Guestbook 
+                                          WHERE full_name = '$first_name' AND email = '$db_email' AND comment = '$db_comment' ";
+                                $result = mysqli_query($conn, $query);
+                  
+                                // This switch statement will prevent entry dupliation even after page resubmission
+                                switch (mysqli_num_rows($result)) 
+                                {
+                                    case 0:
+                                    mysqli_stmt_execute($stmt); 
+
+                                    // This displays a success message everytime the user submits a comment
+                                    $success_message = "Thank you for sharing! successfully sent!";
+                                    break;
+                                default:
+                                    $success_message = "This comment already exists";
+                            }
                         } else {
                             $success_message = "Couldn't save your comment";
                         }  
@@ -148,11 +161,23 @@
                     // Close the connection
                     mysqli_close($conn);
                 ?></p>
+            <div id = "comment_count">
+                <h4>
+                    <?php echo $comment_count . " comments"; ?> 
+                </h4>
+            </div>
             </div>
         </div>
         <div class="footer">
-            <h3>About Us</h3>
-            <P>You can contact us on our socials!</P>
+            <h3>Our Ndola</h3>
+            <P>
+                Thank you for being part of Ndola's story. Your words help keep the spirit of Ndola Alive. Keep sharing and celebrating
+                our home!
+            </P>
+            <p id = "credits">
+                <i>this guest book is a passion project by <a target = "_blank" href = "https://www.linkedin.com/in/angel-yuzya-852a4031b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Angel Yuzya</a> in partnership
+                    with <a href = "https://www.linkedin.com/in/emmanuel-mazonga-69b3032a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Emmanuel Mazonga</a>, dedicated to celebarting the beating heart of Ndola.</i>
+            </p>
         </div>
     </body>
 </html>
