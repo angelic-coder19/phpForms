@@ -155,7 +155,7 @@
                     {
                         while ($row = mysqli_fetch_assoc($result)) // This places the content in each column into an associative array
                         {
-                            echo $row["comment"] . "<br><br>" . $row["full_name"] . "<br>" . $row["email"] . "<br>" . $row["reg_date"] . "<br><br>_________________________<br><br>";
+                            echo $row["comment"] . "<br><br>" . "<span>" . $row["full_name"] . "<br>" . $row["email"] . "<br>" . $row["reg_date"]. "</span>". "<span id = 'line'>"."<br>____________________________________________________________________________________________________________________________<br><br>"."</span>";
                         }
                     }
                     // Close the connection
@@ -169,14 +169,14 @@
             </div>
         </div>
         <div class="footer">
-            <h3>Our Ndola</h3>
-            <P>
+            <h3 id = "OurNdola">Our Ndola</h3>
+            <P class = "aboutpara">
                 Thank you for being part of Ndola's story. Your words help keep the spirit of Ndola Alive. Keep sharing and celebrating
                 our home!
             </P>
-            <p id = "credits">
+            <p class = "aboutpara" id = "credits">
                 <i>this guest book is a passion project by <a target = "_blank" href = "https://www.linkedin.com/in/angel-yuzya-852a4031b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Angel Yuzya</a> in partnership
-                    with <a href = "https://www.linkedin.com/in/emmanuel-mazonga-69b3032a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Emmanuel Mazonga</a>, dedicated to celebarting the beating heart of Ndola.</i>
+                    with <a target = "_blank" href = "https://www.linkedin.com/in/emmanuel-mazonga-69b3032a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Emmanuel Mazonga</a>, dedicated to celebarting the beating heart of Ndola.</i>
             </p>
         </div>
     </body>
